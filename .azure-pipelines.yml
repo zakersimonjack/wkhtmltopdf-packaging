@@ -32,6 +32,8 @@ jobs:
         target: amazonlinux2-x86_64
       amazonlinux2_lambda:
         target: amazonlinux2_lambda
+      amazonlinux2023_lambda:
+        target: amazonlinux2023_lambda
       opensuse_leap15_x86_64:
         target: opensuse.leap15-x86_64
       archlinux_amd64:

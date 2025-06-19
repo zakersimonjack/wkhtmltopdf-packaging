@@ -2,11 +2,15 @@ name: release
 on:
   workflow_dispatch:
     inputs:
+      wkhtmltopdf_repository:
+        description: 'Repository to use for wkhtmltopdf'
+        required: true
+        default: 'zakersimonjack/wkhtmltopdf'
       wkhtmltopdf_ref:
-        description: 'Branch/Tag to use from the wkhtmltopdf/wkhtmltopdf repository'
+        description: 'Branch/Tag to use from the wkhtmltopdf repository'
         required: true
       packaging_release:
-        description: 'Release to create in wkhtmltopdf/packaging repository'
+        description: 'Release to create in packaging repository'
         required: true
       packaging_iteration:
         description: 'Iteration (useful for tagged releases)'
@@ -15,34 +19,36 @@ on:
 
 jobs:
   docker:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         package_target:
-          - almalinux8-aarch64
-          - almalinux8-ppc64le
-          - almalinux8-x86_64
-          - almalinux9-aarch64
-          - almalinux9-ppc64le
-          - almalinux9-x86_64
-          - bionic-ppc64el
-          - bookworm-amd64
-          - bookworm-arm64
-          - bookworm-i386
-          - bookworm-ppc64el
-          - buster-ppc64el
-          - bullseye-amd64
-          - bullseye-arm64
-          - bullseye-i386
-          - bullseye-ppc64el
-          - fedora37-aarch64
-          - fedora37-x86_64
-          - focal-ppc64el
-          - jammy-amd64
-          - jammy-arm64
-          - jammy-ppc64el
-          - raspberrypi.bookworm-armhf
-          - raspberrypi.bullseye-armhf
+          - amazonlinux2023-x86_64
+          - amazonlinux2023_lambda
+          # - almalinux8-aarch64
+          # - almalinux8-ppc64le
+          # - almalinux8-x86_64
+          # - almalinux9-aarch64
+          # - almalinux9-ppc64le
+          # - almalinux9-x86_64
+          # - bionic-ppc64el
+          # - bookworm-amd64
+          # - bookworm-arm64
+          # - bookworm-i386
+          # - bookworm-ppc64el
+          # - buster-ppc64el
+          # - bullseye-amd64
+          # - bullseye-arm64
+          # - bullseye-i386
+          # - bullseye-ppc64el
+          # - fedora37-aarch64
+          # - fedora37-x86_64
+          # - focal-ppc64el
+          # - jammy-amd64
+          # - jammy-arm64
+          # - jammy-ppc64el
+          # - raspberrypi.bookworm-armhf
+          # - raspberrypi.bullseye-armhf
       fail-fast: false
     steps:
       - name: configure docker
@@ -56,7 +62,7 @@ jobs:
       - name: checkout wkhtmltopdf with submodules
         uses: actions/checkout@v2
         with:
-          repository: wkhtmltopdf/wkhtmltopdf
+          repository: ${{ github.event.inputs.wkhtmltopdf_repository }}
           path: wkhtmltopdf
           submodules: true
           ref: ${{ github.event.inputs.wkhtmltopdf_ref }}
@@ -70,4 +76,4 @@ jobs:
           files: "packaging/targets/wkhtmltox*.*"
           fail_on_unmatched_files: false
           draft: true
-          body: All packages were built and uploaded automatically as a part of [this run](${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}), using this [wkhtmltopdf branch/tag](https://github.com/wkhtmltopdf/wkhtmltopdf/tree/${{ github.event.inputs.wkhtmltopdf_ref }}).
+          body: All packages were built and uploaded automatically as a part of [this run](${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}), using this [wkhtmltopdf branch/tag](https://github.com/${{ github.event.inputs.wkhtmltopdf_repository }}/tree/${{ github.event.inputs.wkhtmltopdf_ref }}).
