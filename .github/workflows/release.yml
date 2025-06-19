@@ -23,8 +23,8 @@ jobs:
     strategy:
       matrix:
         package_target:
-          - amazonlinux2023-x86_64
           - amazonlinux2023_lambda
+          # - centos7-x86_64
           # - almalinux8-aarch64
           # - almalinux8-ppc64le
           # - almalinux8-x86_64
