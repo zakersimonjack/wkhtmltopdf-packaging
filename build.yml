@@ -391,7 +391,7 @@ docker-targets:
     args:
       from: amazonlinux:2023
     output: lambda_zip
-    after_compile: amazonlinux2_lambda
+    after_compile: amazonlinux2023_lambda
     arch: x86_64
 
   opensuse.leap15:
