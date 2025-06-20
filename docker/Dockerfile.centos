@@ -19,4 +19,8 @@ RUN yum install -y \
     openssl-devel \
     perl \
     zlib-devel \
+    binutils \
+    tar \
+    which \
+    util-linux \
     && yum clean all

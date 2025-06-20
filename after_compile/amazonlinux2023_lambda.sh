@@ -3,12 +3,11 @@
 # We need only binary wkhtmltox files in lambda layer, so we delete all the others
 rm -rf /tgt/wkhtmltox/{include,share,lib}
 
-# We need to copy dependencies which are not presented in amazonlinux2 image
-libs="libjpeg libpng16 libXrender libfontconfig libfreetype libXext libX11 libxcb libXau libexpat libuuid libbz2"
 mkdir -p /tgt/wkhtmltox/lib
-for lib in $(echo $libs); do
-    echo ".*${lib}\.so\.[0-9]{1,2}" | xargs find /usr/lib64 -regextype posix-awk -regex | xargs cp -t /tgt/wkhtmltox/lib/
-done
+# We need to copy dependencies which are not presented in amazonlinux2023 image
+curl https://raw.githubusercontent.com/ncopa/lddtree/refs/tags/v1.27/lddtree.sh -o /tgt/lddtree.sh
+chmod +x /tgt/lddtree.sh
+cp $(/tgt/lddtree.sh -l /tgt/wkhtmltox/bin/wkhtmltopdf | grep '^\/lib' | sed -r -e '/wkhtmltopdf$/d') /tgt/wkhtmltox/lib/
 
 # To be able to create pdf files we need a font. 
 # There is one (dejavu) in the docker image used for compilation.
